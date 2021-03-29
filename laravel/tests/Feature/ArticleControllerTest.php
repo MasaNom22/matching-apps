@@ -50,8 +50,18 @@ class ArticleControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertViewIs('articles.index');
     }
+    //投稿詳細機能
     use DatabaseTransactions;
-    public function testtAuthShow()
+    public function testGuestShow()
+    {
+        $user = factory(User::class)->create();
+        $article = factory(Article::class)->create();
+        $response = $this->get(route('articles.show', ['id' => $article->id]));
+
+        $response->assertRedirect(route('login'));
+    }
+    use DatabaseTransactions;
+    public function testAuthShow()
     {
         $user = factory(User::class)->create();
         $article = factory(Article::class)->create();
@@ -59,5 +69,24 @@ class ArticleControllerTest extends TestCase
             ->get(route('articles.show', ['id' => $article->id]));
 
         $response->assertStatus(200)->assertViewIs('articles.show');
+    }
+    //投稿編集機能
+    use DatabaseTransactions;
+    public function testGuestEdit()
+    {
+        $article = factory(Article::class)->create();
+        $response = $this->get(route('articles.edit', ['id' => $article->id]));
+
+        $response->assertRedirect(route('login'));
+    }
+    use DatabaseTransactions;
+    public function testAuthEdit()
+    {
+        $article = factory(Article::class)->create();
+        $user = $article->user;
+        $response = $this->actingAs($user)
+            ->get(route('articles.edit', ['id' => $article->id]));
+
+        $response->assertStatus(200)->assertViewIs('articles.edit');
     }
 }
