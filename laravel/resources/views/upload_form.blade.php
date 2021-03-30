@@ -19,14 +19,14 @@
 	                  <label for="profile_image">
 	                    <p class="mb-1">プロフィール画像</p>
 	                    <img class="profile-icon image-upload rounded-circle" src="{{ Storage::url($user->uploadimages->file_path) }}" style="width:50%;"　alt="プロフィール画像">
-	                    
+
 	                  </label>
 	                </div>
 	@else
 		<form method="post" action="{{ route('upload_image') }}" enctype="multipart/form-data">
-		
+
 			@csrf
-			
+
 			<div class="form-group row">
 				<label for="content" class="col-md-4 col-form-label text-md-right fas fa-arrow-alt-circle-down">{{ __('画像を選択') }}</label>
 				<div class="col-md-6">
